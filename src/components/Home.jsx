@@ -2,40 +2,70 @@ import React from "react";
 
 function Home() {
   return (
-    <div>
+    <div className="h-screen w-screen">
       {/* NAVBAR START */}
       <div className="flex justify-around pt-8 font-semibold">
         <div className="text-3xl text-title border-b-4 border-title rounded-xl pb-2 ml-7">
           <h1>Kitap Kurdu</h1>
         </div>
-        <div className="flex justify-evenly w-3/5 font-bold text-lg text-navbar ">
-          <div>Bilim Kurgu</div>
-          <div className="h-6 w-px bg-black"></div>
-          <div>Fantastik</div>
-          <div className="h-6 w-px bg-black"></div>
-          <div>Macera</div>
-          <div className="h-6 w-px bg-black"></div>
-          <div>Romantik</div>
-          <div className="h-6 w-px bg-black"></div>
-          <div>Polisiye</div>
-          <div className="h-6 w-px bg-black"></div>
-          <div>Klasikler</div>
-          <div className="h-6 w-px bg-black"></div>
-          <div>Şiir</div>
-          <div className="h-6 w-px bg-black"></div>
-          <div>Çizgi Roman</div>
-          <div className="h-6 w-px bg-black"></div>
-          <div>İletişim</div>
+        {/* SEARCH BAR */}
+        <div className="w-2/5">
+          <form>
+            <label className="text-navbar font-medium">Ara:</label>
+            <input
+              type="text"
+              name="searchBar"
+              className="border-2 border-black pt-1 pb-1 pl-6 pr-6 rounded-2xl w-3/5 ml-3"
+            />
+            <button className="border-2 border-black pt-2 pb-2 pl-3 pr-3 rounded-2xl ml-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                fill="currentColor"
+                className="bi bi-search"
+                viewBox="0 0 16 16"
+              >
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+              </svg>
+            </button>
+          </form>
+        </div>
+        {/* SIGN IN/ SIGN UP */}
+        <div>
+          <button className="border-2 border-navbar bg-navbar text-gray-300 pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm">
+            Üye Ol
+          </button>
+          <button className="border-2 border-navbar bg-navbar text-gray-300 pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm">
+            Giriş Yap
+          </button>
         </div>
       </div>
       {/* NAVBAR END */}
 
-      {/* CONTEXT START */}
-      <div className="text-center align-middle">
-        <p>ALIŞVERİŞİN GÜVENLİ ADRESİ</p>
-        <p>Aradığınız her kategoride kitap bulma imkanı</p>
+      {/* CATEGORIES START */}
+      <div className="text-center align-middle mt-5 p-6 bg-lime-600 text-gray-100">
+        <div className="flex justify-evenly w-full font-bold text-lg text-center ">
+          <div>Bilim Kurgu</div>
+          <div className="h-6 w-px bg-gray-300"></div>
+          <div>Fantastik</div>
+          <div className="h-6 w-px bg-gray-300"></div>
+          <div>Macera</div>
+          <div className="h-6 w-px bg-gray-300"></div>
+          <div>Romantik</div>
+          <div className="h-6 w-px bg-gray-300"></div>
+          <div>Polisiye</div>
+          <div className="h-6 w-px bg-gray-300"></div>
+          <div>Klasikler</div>
+          <div className="h-6 w-px bg-gray-300"></div>
+          <div>Şiir</div>
+          <div className="h-6 w-px bg-gray-300"></div>
+          <div>Çizgi Roman</div>
+          <div className="h-6 w-px bg-gray-300"></div>
+          <div>İletişim</div>
+        </div>
       </div>
-      {/* CONTEXT END */}
+      {/* CATEGORIES END */}
     </div>
   );
 }
