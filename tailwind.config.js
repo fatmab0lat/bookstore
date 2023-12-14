@@ -6,6 +6,7 @@ export default {
       colors: {
         title: "#ED7D31",
         navbar: "#241468",
+        signUpback: "#282D4F",
       },
     },
   },
