@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { basicSchema } from "../schemas";
+import api from "../api";
 
 function SignUp() {
+  const [users, setUsers] = useState([]);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  const fetchUsers = async () => {
+    const response = await api.get("/users/");
+    setUsers(response.data);
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const onSubmit = async (values, actions) => {
     await new Promise((resolve) => {
       setTimeout(resolve, 1000);
@@ -10,15 +28,7 @@ function SignUp() {
     actions.resetForm();
   };
 
-  const {
-    values,
-    errors,
-    handleChange,
-    handleSubmit,
-    setFieldValue,
-    isSubmitting,
-    isValid,
-  } = useFormik({
+  const { values, errors, handleSubmit, setFieldValue, isValid } = useFormik({
     initialValues: {
       ad: "",
       soyad: "",
@@ -40,8 +50,8 @@ function SignUp() {
           <input
             type="text"
             value={values.ad}
-            onChange={handleChange}
-            id="ad"
+            onChange={(e) => setFieldValue("ad", e.currentTarget.value)}
+            name="firstName"
             placeholder="Adınızı Giriniz"
             className="text-black rounded-lg p-1 w-80 mt-2 mb-2 items-center"
           />
@@ -55,8 +65,8 @@ function SignUp() {
           <input
             type="text"
             value={values.soyad}
-            onChange={handleChange}
-            id="soyad"
+            onChange={(e) => setFieldValue("soyad", e.currentTarget.value)}
+            name="lastName"
             placeholder="Soyadınızı Giriniz"
             className="text-black rounded-lg p-1 w-80 mt-2 mb-2"
           />
@@ -85,8 +95,8 @@ function SignUp() {
           <input
             type="password"
             value={values.sifre}
-            onChange={handleChange}
-            id="sifre"
+            onChange={(e) => setFieldValue("sifre", e.currentTarget.value)}
+            name="password"
             placeholder="Şifrenizi Giriniz"
             className="text-black rounded-lg p-1 w-80 mt-2 mb-2"
           />
@@ -99,8 +109,10 @@ function SignUp() {
           <input
             type="password"
             value={values.sifreTekrar}
-            onChange={handleChange}
-            id="sifreTekrar"
+            onChange={(e) =>
+              setFieldValue("sifreTekrar", e.currentTarget.value)
+            }
+            name="confirmPassword"
             placeholder="Şifrenizi Yeniden Giriniz"
             className="text-black rounded-lg p-1 w-80 mt-2 mb-2"
           />

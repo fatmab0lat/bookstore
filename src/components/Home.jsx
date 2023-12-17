@@ -40,11 +40,11 @@ function Home() {
         <div>
           <button
             onClick={navigateToSignUp}
-            className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-gray-300 pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
+            className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
           >
             Üye Ol
           </button>
-          <button className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110  text-gray-300 pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm">
+          <button className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110  text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm">
             Giriş Yap
           </button>
         </div>
