@@ -1,7 +1,11 @@
 import React from "react";
-import SignUp from "./SignUp";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const navigate = useNavigate();
+  const navigateToSignUp = () => {
+    navigate("/signUp");
+  };
   return (
     <div className="h-screen w-screen">
       {/* NAVBAR START */}
@@ -34,7 +38,10 @@ function Home() {
         </div>
         {/* SIGN IN/ SIGN UP */}
         <div>
-          <button className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-gray-300 pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm">
+          <button
+            onClick={navigateToSignUp}
+            className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-gray-300 pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
+          >
             Üye Ol
           </button>
           <button className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110  text-gray-300 pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm">

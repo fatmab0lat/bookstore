@@ -17,6 +17,7 @@ function SignUp() {
     handleSubmit,
     setFieldValue,
     isSubmitting,
+    isValid,
   } = useFormik({
     initialValues: {
       ad: "",
@@ -108,9 +109,10 @@ function SignUp() {
           )}
         </div>
         <button
-          disabled={isSubmitting}
+          // disabled={isSubmitting}
+          disabled={!isValid}
           type="submit"
-          className="border-2 border-title bg-title text-black pt-2 pb-2 pl-6 pr-6 rounded-2xl w-80 mt-3 hover:scale-105 hover:delay-250 font-bold tracking-widest "
+          className="border-2 border-title bg-title text-black pt-2 pb-2 pl-6 pr-6 rounded-2xl w-80 disabled:opacity-40 disabled:scale-100 mt-3 hover:scale-105 hover:delay-250 font-bold tracking-widest "
         >
           Kayıt Ol
         </button>
