@@ -71,7 +71,7 @@ function SignUp() {
             value={values.email}
             onChange={(e) =>
               setFieldValue("email", e.currentTarget.value)
-            } /*to be able to fix unwritable input i used setFieldValue function*/
+            } /*to be able to fix unwritable input i used setFieldValue function  */
             id="mailAdress"
             placeholder="Mail Adresinizi Giriniz"
             className="text-black rounded-lg p-1 w-80 mt-2 mb-2"
