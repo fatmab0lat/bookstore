@@ -1,9 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from dotenv import load_dotenv
+import os
 
-URL_DATABASE = 'mysql+pymysql://root:fravigeneymu123@localhost:3306/bookstore'
-
+load_dotenv()
+URL_DATABASE = os.getenv('VITE_URL_DATABASE') 
 engine = create_engine(URL_DATABASE)
 
 SessionLocal = sessionmaker(autocommit = False, autoflush = False, bind = engine)
