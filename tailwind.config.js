@@ -7,6 +7,7 @@ export default {
         title: "#ED7D31",
         navbar: "#241468",
         signUpback: "#282D4F",
+        loginBack: "#282D4F",
       },
     },
   },

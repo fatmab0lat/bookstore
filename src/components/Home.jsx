@@ -6,7 +6,9 @@ function Home() {
   const navigateToSignUp = () => {
     navigate("/signUp");
   };
-  /*deneme*/
+  const navigateToLogin = () => {
+    navigate("/login");
+  };
   return (
     <div className="h-screen w-screen">
       {/* NAVBAR START */}
@@ -45,7 +47,9 @@ function Home() {
           >
             Üye Ol
           </button>
-          <button className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110  text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm">
+          <button 
+          onClick={navigateToLogin}
+          className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110  text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm">
             Giriş Yap
           </button>
         </div>
