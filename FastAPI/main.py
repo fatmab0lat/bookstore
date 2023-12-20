@@ -10,12 +10,15 @@ from fastapi.middleware.cors import CORSMiddleware
 app = fastapi.FastAPI()
 
 origins = [
-  'http://localhost:5173/signUP'
+  "http://localhost:5173/signUp/",
 ]
 
 app.add_middleware(
   CORSMiddleware,
-  allow_origins = origins
+  allow_origins = ["*"],
+  allow_credentials = True,
+  allow_methods = ['*'],
+  allow_headers = ['*'],
 )
 
 class UserBase(pydantic.BaseModel):
