@@ -6,6 +6,7 @@ function Home() {
   const navigateToSignUp = () => {
     navigate("/signUp");
   };
+  /*deneme*/
   return (
     <div className="h-screen w-screen">
       {/* NAVBAR START */}
