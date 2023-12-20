@@ -5,12 +5,11 @@ import api from "../api";
 
 function SignUp() {
   const [users, setUsers] = useState([]);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
+  const [firstNameData, setFirstNameData] = useState("");
+  const [lastNameData, setLastNameData] = useState("");
+  const [emailData, setEmailData] = useState("");
+  const [passwordData, setPasswordData] = useState("");
+  const [confirmedPasswordData, setConfirmedPasswordData] = useState("");
 
   const fetchUsers = async () => {
     const response = await api.get("/users/");
@@ -21,12 +20,49 @@ function SignUp() {
     fetchUsers();
   }, []);
 
-  const onSubmit = async (values, actions) => {
+  const handleFirstNameChange = (event) => {
+    setFieldValue("ad", event.currentTarget.value);
+    setFirstNameData(event.target.value);
+  };
+  const handleLastNameChange = (event) => {
+    setFieldValue("soyad", event.currentTarget.value);
+    setLastNameData(event.target.value);
+  };
+  const handleEmailChange = (event) => {
+    setFieldValue("email", event.currentTarget.value);
+    setEmailData(event.target.value);
+  };
+  const handlePasswordChange = (event) => {
+    setFieldValue("sifre", event.currentTarget.value);
+    setPasswordData(event.target.value);
+  };
+  const handleConfirmedPasswordChange = (event) => {
+    setFieldValue("sifreTekrar", event.currentTarget.value);
+    setConfirmedPasswordData(event.target.value);
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    await api.post("/users/", {
+      firstName: firstNameData,
+      lastName: lastNameData,
+      email: emailData,
+      hashed_password: passwordData,
+    });
+    fetchUsers();
+    setFirstNameData("");
+    setLastNameData("");
+    setEmailData("");
+    setPasswordData("");
+    setConfirmedPasswordData("");
+  };
+
+  /*const onSubmit = async (values, actions) => {
     await new Promise((resolve) => {
       setTimeout(resolve, 1000);
     });
     actions.resetForm();
-  };
+  };*/
 
   const { values, errors, handleSubmit, setFieldValue, isValid } = useFormik({
     initialValues: {
@@ -37,20 +73,19 @@ function SignUp() {
       sifreTekrar: "",
     },
     validationSchema: basicSchema,
-    onSubmit,
   });
   return (
     <div className="w-screen h-screen bg-signUpback">
       <form
         className="w-screen h-screen flex flex-col justify-center items-center text-slate-100"
-        onSubmit={handleSubmit}
+        onSubmit={handleFormSubmit}
       >
         <div className="flex flex-col">
           <label>Ad</label>
           <input
             type="text"
-            value={values.ad}
-            onChange={(e) => setFieldValue("ad", e.currentTarget.value)}
+            value={firstNameData}
+            onChange={handleFirstNameChange}
             name="firstName"
             placeholder="Adınızı Giriniz"
             className="text-black rounded-lg p-1 w-80 mt-2 mb-2 items-center"
@@ -64,8 +99,8 @@ function SignUp() {
           <label>Soyad</label>
           <input
             type="text"
-            value={values.soyad}
-            onChange={(e) => setFieldValue("soyad", e.currentTarget.value)}
+            value={lastNameData}
+            onChange={handleLastNameChange}
             name="lastName"
             placeholder="Soyadınızı Giriniz"
             className="text-black rounded-lg p-1 w-80 mt-2 mb-2"
@@ -78,9 +113,9 @@ function SignUp() {
           <label>Mail Adresiniz</label>
           <input
             type="email"
-            value={values.email}
-            onChange={(e) =>
-              setFieldValue("email", e.currentTarget.value)
+            value={emailData}
+            onChange={
+              handleEmailChange
             } /*to be able to fix unwritable input i used setFieldValue function  */
             id="mailAdress"
             placeholder="Mail Adresinizi Giriniz"
@@ -94,8 +129,8 @@ function SignUp() {
           <label>Şifre</label>
           <input
             type="password"
-            value={values.sifre}
-            onChange={(e) => setFieldValue("sifre", e.currentTarget.value)}
+            value={passwordData}
+            onChange={handlePasswordChange}
             name="password"
             placeholder="Şifrenizi Giriniz"
             className="text-black rounded-lg p-1 w-80 mt-2 mb-2"
@@ -108,10 +143,8 @@ function SignUp() {
           <label>Şifre Tekrar</label>
           <input
             type="password"
-            value={values.sifreTekrar}
-            onChange={(e) =>
-              setFieldValue("sifreTekrar", e.currentTarget.value)
-            }
+            value={confirmedPasswordData}
+            onChange={handleConfirmedPasswordChange}
             name="confirmPassword"
             placeholder="Şifrenizi Yeniden Giriniz"
             className="text-black rounded-lg p-1 w-80 mt-2 mb-2"
@@ -133,4 +166,9 @@ function SignUp() {
   );
 }
 
+/*
+            onChange={(e) =>
+              setFieldValue("email", e.currentTarget.value)
+
+*/
 export default SignUp;
