@@ -1,3 +1,4 @@
+import AdminLogin from "./components/AdminLogin";
 import Home from "./components/Home";
 import SignUp from "./components/SignUp";
 import { Routes, Route } from "react-router-dom";
@@ -8,7 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signUp" element={<SignUp />} />
-        {/* <Route path="/" element={<Home/>}/> */}
+        <Route path="/adminGiris" element={<AdminLogin />} />
       </Routes>
     </>
   );
