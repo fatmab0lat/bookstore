@@ -6,13 +6,14 @@ function Admin() {
   const [usernameData, setUsernameData] = useState("");
   const [passwordData, setPasswordData] = useState("");
 
-  const { values, errors, handleSubmit, setFieldValue, isValid } = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-    },
-    validationSchema: adminSchema,
-  });
+  const { values, errors, handleSubmit, setFieldValue, isValid, dirty } =
+    useFormik({
+      initialValues: {
+        username: "",
+        password: "",
+      },
+      validationSchema: adminSchema,
+    });
   const handleUsernameChange = (event) => {
     setFieldValue("username", event.currentTarget.value);
     setUsernameData(event.target.value);
@@ -52,7 +53,7 @@ function Admin() {
           )}
         </div>
         <button
-          disabled={!isValid}
+          disabled={!(isValid && dirty)}
           className="border-2 border-title bg-title text-black pt-2 pb-2 pl-6 pr-6 rounded-2xl w-80 disabled:opacity-40 disabled:scale-100 mt-3 hover:scale-105 hover:delay-250 font-bold tracking-widest "
         >
           Giriş Yap

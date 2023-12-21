@@ -77,16 +77,17 @@ function SignUp() {
     actions.resetForm();
   };*/
 
-  const { values, errors, handleSubmit, setFieldValue, isValid } = useFormik({
-    initialValues: {
-      ad: "",
-      soyad: "",
-      email: "",
-      sifre: "",
-      sifreTekrar: "",
-    },
-    validationSchema: basicSchema,
-  });
+  const { values, errors, handleSubmit, setFieldValue, isValid, dirty } =
+    useFormik({
+      initialValues: {
+        ad: "",
+        soyad: "",
+        email: "",
+        sifre: "",
+        sifreTekrar: "",
+      },
+      validationSchema: basicSchema,
+    });
   return (
     <div className="w-screen h-screen bg-signUpback">
       <form
@@ -168,7 +169,7 @@ function SignUp() {
         </div>
         <button
           // disabled={isSubmitting}
-          disabled={!isValid}
+          disabled={!(isValid && dirty)}
           type="submit"
           className="border-2 border-title bg-title text-black pt-2 pb-2 pl-6 pr-6 rounded-2xl w-80 disabled:opacity-40 disabled:scale-100 mt-3 hover:scale-105 hover:delay-250 font-bold tracking-widest "
         >
