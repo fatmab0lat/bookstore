@@ -6,6 +6,8 @@ import database
 import sqlalchemy.orm
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+import bcrypt
+from passlib.context import CryptContext
 
 app = fastapi.FastAPI()
 
@@ -20,6 +22,11 @@ app.add_middleware(
   allow_methods = ['*'],
   allow_headers = ['*'],
 )
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
 
 class UserBase(pydantic.BaseModel):
   firstName: str
@@ -44,9 +51,18 @@ def get_db():
 db_dependency = Annotated[sqlalchemy.orm.Session, fastapi.Depends(get_db)]
 models.Base.metadata.create_all(bind=database.engine)
 
+# @app.post("/hash-password/")
+async def hash_password(password: str):
+    try:
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        return hashed_password.decode('utf-8')
+    except Exception as e:
+        return {"error": str(e)}
+
 @app.post("/users/",status_code=fastapi.status.HTTP_201_CREATED)
 async def create_user(user: UserBase, db: db_dependency):
   db_user = models.User(**user.dict())
+  #user.hashed_password = get_password_hash(user.password)
   db.add(db_user)
   db.commit()
   db.refresh(db_user)

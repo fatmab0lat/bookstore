@@ -10,6 +10,7 @@ function SignUp() {
   const [emailData, setEmailData] = useState("");
   const [passwordData, setPasswordData] = useState("");
   const [confirmedPasswordData, setConfirmedPasswordData] = useState("");
+  const [hashed_password, setHashedPassword] = useState("");
 
   const fetchUsers = async () => {
     const response = await api.get("/users/");
@@ -56,6 +57,18 @@ function SignUp() {
     setPasswordData("");
     setConfirmedPasswordData("");
   };
+
+  /*const sendPassword = async () => {
+    try {
+      const response = await api.post("/hash_password/", {
+        hashed_password: passwordData,
+      });
+      const hashedPassword = response.data.hashed_password;
+      setHashedPassword(hashedPassword); // Hashlenmiş şifreyi state'e set et
+    } catch (error) {
+      console.error("Şifre hashleme işlemi başarısız oldu:", error);
+    }
+  };*/
 
   /*const onSubmit = async (values, actions) => {
     await new Promise((resolve) => {

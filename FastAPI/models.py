@@ -9,7 +9,7 @@ class User(Base):
     firstName = Column(String(25))
     lastName = Column(String(25))
     email = Column(String(50), unique=True, index=True)
-    hashed_password = Column(String(25))
+    hashed_password = Column(String(70))
 
 
 
