@@ -85,6 +85,7 @@ function SignUp() {
         email: "",
         sifre: "",
         sifreTekrar: "",
+        kullaniciSozlesmesi: false,
       },
       validationSchema: basicSchema,
     });
@@ -165,6 +166,22 @@ function SignUp() {
           />
           {errors.sifreTekrar && (
             <p className="error text-red-600 text-xs">{errors.sifreTekrar}</p>
+          )}
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            name="kullaniciSozlesmesi"
+            value={values.kullaniciSozlesmesi}
+            onChange={(e) =>
+              setFieldValue("kullaniciSozlesmesi", e.currentTarget.value)
+            }
+          />
+          <label className="pl-4">Kullanıcı Sözleşmesi</label>
+          {errors.kullaniciSozlesmesi && (
+            <p className="error text-red-600 text-xs">
+              {errors.kullaniciSozlesmesi}
+            </p>
           )}
         </div>
         <button

@@ -25,6 +25,7 @@ export const basicSchema = yup.object().shape({
     })
     // .oneOf([yup.ref("password")], "Şifreler uyuşmuyor")
     .required("Belirlediğiniz şifreyi tekrar girmelisiniz"),
+  kullaniciSozlesmesi: yup.boolean().oneOf([true], "Hata"),
 });
 
 export const adminSchema = yup.object().shape({
