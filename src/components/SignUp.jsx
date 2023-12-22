@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { basicSchema } from "../schemas";
 import api from "../api";
+import { Link } from "react-router-dom";
 
 function SignUp() {
   const [users, setUsers] = useState([]);
@@ -11,6 +12,7 @@ function SignUp() {
   const [passwordData, setPasswordData] = useState("");
   const [confirmedPasswordData, setConfirmedPasswordData] = useState("");
   const [hashed_password, setHashedPassword] = useState("");
+  const [btnStatus, setBtnStatus] = useState(false);
 
   const fetchUsers = async () => {
     const response = await api.get("/users/");
@@ -40,6 +42,15 @@ function SignUp() {
   const handleConfirmedPasswordChange = (event) => {
     setFieldValue("sifreTekrar", event.currentTarget.value);
     setConfirmedPasswordData(event.target.value);
+  };
+
+  const handleCheckboxChange = (e) => {
+    console.log(e.target.checked);
+    if (e.target.checked) {
+      setBtnStatus(true);
+    } else {
+      setBtnStatus(false);
+    }
   };
 
   const handleFormSubmit = async (event) => {
@@ -89,6 +100,7 @@ function SignUp() {
       },
       validationSchema: basicSchema,
     });
+
   return (
     <div className="w-screen h-screen bg-signUpback">
       <form
@@ -168,26 +180,28 @@ function SignUp() {
             <p className="error text-red-600 text-xs">{errors.sifreTekrar}</p>
           )}
         </div>
-        <div>
+        <div className="mt-3">
           <input
             type="checkbox"
             name="kullaniciSozlesmesi"
-            value={values.kullaniciSozlesmesi}
-            onChange={(e) =>
-              setFieldValue("kullaniciSozlesmesi", e.currentTarget.value)
-            }
+            onChange={handleCheckboxChange}
           />
-          <label className="pl-4">Kullanıcı Sözleşmesi</label>
+          <Link to="/kullaniciSozlesmesi" target="_blank">
+            <label className="ml-4 text-green-600 font-semibold underline">
+              Kullanıcı Sözleşmesini Onaylıyorum
+            </label>
+          </Link>
           {errors.kullaniciSozlesmesi && (
-            <p className="error text-red-600 text-xs">
+            <p className="error text-red-600 text-xs text-center">
               {errors.kullaniciSozlesmesi}
             </p>
           )}
         </div>
         <button
           // disabled={isSubmitting}
-          disabled={!(isValid && dirty)}
+          disabled={!(isValid && dirty && btnStatus)}
           type="submit"
+          name="signup"
           className="border-2 border-title bg-title text-black pt-2 pb-2 pl-6 pr-6 rounded-2xl w-80 disabled:opacity-40 disabled:scale-100 mt-3 hover:scale-105 hover:delay-250 font-bold tracking-widest "
         >
           Kayıt Ol
