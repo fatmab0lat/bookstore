@@ -25,4 +25,12 @@ export const basicSchema = yup.object().shape({
     })
     // .oneOf([yup.ref("password")], "Şifreler uyuşmuyor")
     .required("Belirlediğiniz şifreyi tekrar girmelisiniz"),
+  kullaniciSozlesmesi: yup
+    .boolean()
+    .oneOf([false], "KUllanıcı Sözleşmesini Kabul Etmelisiniz"),
+});
+
+export const adminSchema = yup.object().shape({
+  username: yup.string().required("Kullanıcı adı zorunludur"),
+  password: yup.string().required("Şifre girmek zorunludur"),
 });

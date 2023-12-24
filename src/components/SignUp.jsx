@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { basicSchema } from "../schemas";
 import api from "../api";
+import { Link } from "react-router-dom";
 
 function SignUp() {
   const [users, setUsers] = useState([]);
@@ -10,6 +11,8 @@ function SignUp() {
   const [emailData, setEmailData] = useState("");
   const [passwordData, setPasswordData] = useState("");
   const [confirmedPasswordData, setConfirmedPasswordData] = useState("");
+  const [hashed_password, setHashedPassword] = useState("");
+  const [btnStatus, setBtnStatus] = useState(false);
 
   const fetchUsers = async () => {
     const response = await api.get("/users/");
@@ -41,6 +44,15 @@ function SignUp() {
     setConfirmedPasswordData(event.target.value);
   };
 
+  const handleCheckboxChange = (e) => {
+    console.log(e.target.checked);
+    if (e.target.checked) {
+      setBtnStatus(true);
+    } else {
+      setBtnStatus(false);
+    }
+  };
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     await api.post("/users/", {
@@ -57,6 +69,18 @@ function SignUp() {
     setConfirmedPasswordData("");
   };
 
+  /*const sendPassword = async () => {
+    try {
+      const response = await api.post("/hash_password/", {
+        hashed_password: passwordData,
+      });
+      const hashedPassword = response.data.hashed_password;
+      setHashedPassword(hashedPassword); // Hashlenmiş şifreyi state'e set et
+    } catch (error) {
+      console.error("Şifre hashleme işlemi başarısız oldu:", error);
+    }
+  };*/
+
   /*const onSubmit = async (values, actions) => {
     await new Promise((resolve) => {
       setTimeout(resolve, 1000);
@@ -64,16 +88,19 @@ function SignUp() {
     actions.resetForm();
   };*/
 
-  const { values, errors, handleSubmit, setFieldValue, isValid } = useFormik({
-    initialValues: {
-      ad: "",
-      soyad: "",
-      email: "",
-      sifre: "",
-      sifreTekrar: "",
-    },
-    validationSchema: basicSchema,
-  });
+  const { values, errors, handleSubmit, setFieldValue, isValid, dirty } =
+    useFormik({
+      initialValues: {
+        ad: "",
+        soyad: "",
+        email: "",
+        sifre: "",
+        sifreTekrar: "",
+        kullaniciSozlesmesi: false,
+      },
+      validationSchema: basicSchema,
+    });
+
   return (
     <div className="w-screen h-screen bg-signUpback">
       <form
@@ -153,10 +180,28 @@ function SignUp() {
             <p className="error text-red-600 text-xs">{errors.sifreTekrar}</p>
           )}
         </div>
+        <div className="mt-3">
+          <input
+            type="checkbox"
+            name="kullaniciSozlesmesi"
+            onChange={handleCheckboxChange}
+          />
+          <Link to="/kullaniciSozlesmesi" target="_blank">
+            <label className="ml-4 text-green-600 font-semibold underline">
+              Kullanıcı Sözleşmesini Onaylıyorum
+            </label>
+          </Link>
+          {errors.kullaniciSozlesmesi && (
+            <p className="error text-red-600 text-xs text-center">
+              {errors.kullaniciSozlesmesi}
+            </p>
+          )}
+        </div>
         <button
           // disabled={isSubmitting}
-          disabled={!isValid}
+          disabled={!(isValid && dirty && btnStatus)}
           type="submit"
+          name="signup"
           className="border-2 border-title bg-title text-black pt-2 pb-2 pl-6 pr-6 rounded-2xl w-80 disabled:opacity-40 disabled:scale-100 mt-3 hover:scale-105 hover:delay-250 font-bold tracking-widest "
         >
           Kayıt Ol
