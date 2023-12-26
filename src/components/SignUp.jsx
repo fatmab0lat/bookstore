@@ -69,18 +69,6 @@ function SignUp() {
     setConfirmedPasswordData("");
   };
 
-  /*const sendPassword = async () => {
-    try {
-      const response = await api.post("/hash_password/", {
-        hashed_password: passwordData,
-      });
-      const hashedPassword = response.data.hashed_password;
-      setHashedPassword(hashedPassword); // Hashlenmiş şifreyi state'e set et
-    } catch (error) {
-      console.error("Şifre hashleme işlemi başarısız oldu:", error);
-    }
-  };*/
-
   /*const onSubmit = async (values, actions) => {
     await new Promise((resolve) => {
       setTimeout(resolve, 1000);
@@ -211,9 +199,4 @@ function SignUp() {
   );
 }
 
-/*
-            onChange={(e) =>
-              setFieldValue("email", e.currentTarget.value)
-
-*/
 export default SignUp;
