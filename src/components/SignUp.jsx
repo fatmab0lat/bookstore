@@ -201,7 +201,7 @@ function SignUp() {
           Kayıt Ol
         </button>
         <div className="flex mt-3">
-          <p>Zaten hesabınız var mı:</p>
+          <p>Zaten hesabınız var mı?</p>
           <button className="text-blue-300 ml-2" onClick={navigateToLogin}>
             Giriş Yap
           </button>
