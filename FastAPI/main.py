@@ -12,7 +12,10 @@ from passlib.context import CryptContext
 from database import SessionLocal
 from models import User
 
+
 app = fastapi.FastAPI()
+# app.include_router(auth.router)
+
 
 origins = [
   "http://localhost",
@@ -101,6 +104,7 @@ def delete_user(user_id: int):
     db.commit()
     db.close()
     return {"message": "User deleted successfully"}
+
 
 @app.post("/books/",status_code=fastapi.status.HTTP_201_CREATED)
 async def create_book(book: BookBase, db: db_dependency):

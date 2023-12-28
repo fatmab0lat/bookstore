@@ -10,6 +10,8 @@ class User(Base):
     lastName = Column(String(25))
     email = Column(String(50), unique=True, index=True)
     hashed_password = Column(String(70))
+
+    
 class Book(Base):
     __tablename__ = "books"
 
