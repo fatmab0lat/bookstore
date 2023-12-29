@@ -10,6 +10,8 @@ function SignUp() {
   const [emailData, setEmailData] = useState("");
   const [passwordData, setPasswordData] = useState("");
   const [confirmedPasswordData, setConfirmedPasswordData] = useState("");
+  const [hashed_password, setHashedPassword] = useState("");
+  const [btnStatus, setBtnStatus] = useState(false);
 
   const fetchUsers = async () => {
     const response = await api.get("/users/");
