@@ -17,6 +17,7 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from datetime import datetime,timedelta
 from jose import jwt, JWTError
 
+
 app = fastapi.FastAPI()
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
@@ -38,10 +39,8 @@ app.add_middleware(
 )
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_bearer = OAuth2PasswordBearer(tokenUrl="token")
 
-def get_password_hash(password: str):
-  return pwd_context.hash(password)
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl="token")
   
 def verify_password(plain_password, hashed_password):
   return pwd_context.verify(plain_password, hashed_password)
@@ -84,6 +83,11 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
     #raise HTTPException(status_code=404, detail="User not Found")
     get_user_exception()
   
+
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
 class UserBase(pydantic.BaseModel):
   firstName: str
   lastName: str
@@ -123,14 +127,20 @@ db_dependency = Annotated[sqlalchemy.orm.Session, fastapi.Depends(get_db)]
 models.Base.metadata.create_all(bind=database.engine)
 
 # @app.post("/hash-password/")
-def hash_password(password: str):
-  hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-  return hashed_password.decode('utf-8')
+
+async def hash_password(password: str):
+    try:
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        return hashed_password.decode('utf-8')
+    except Exception as e:
+        return {"error": str(e)}
+
 
 @app.post("/users/",status_code=fastapi.status.HTTP_201_CREATED)
 async def create_user(user: UserBase, db: db_dependency):
   user.hashed_password = hash_password(user.hashed_password)
   db_user = models.User(**user.dict())
+  #user.hashed_password = get_password_hash(user.password)
   db.add(db_user)
   db.commit()
   db.refresh(db_user)
