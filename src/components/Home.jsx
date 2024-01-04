@@ -6,8 +6,8 @@ import FilteredBooks from "./FilteredBooks";
 import GenreTemplate from "./GenreTemplate";
 
 function Home() {
-const navigate = useNavigate();
-const { isAuthenticated, currentUser } = useSelector(selectAuth);
+  const navigate = useNavigate();
+  const { isAuthenticated, currentUser } = useSelector(selectAuth);
 
   const navigateToSignUp = () => {
     navigate("/signUp");
@@ -50,32 +50,32 @@ const { isAuthenticated, currentUser } = useSelector(selectAuth);
         </div>
         {/* SIGN IN/ SIGN UP */}
 
- <div>
-        {isAuthenticated ? (
-          <button
-          onClick={navigateToProfile}
-          className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
-        >
-          Hoşgeldin {currentUser ? currentUser.firstName : "Misafir"}
-        </button>
-        ) : (
-          <>
+        <div>
+          {isAuthenticated ? (
             <button
-              onClick={navigateToSignUp}
+              onClick={navigateToProfile}
               className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
             >
-              Üye Ol
+              Hoşgeldin {currentUser ? currentUser.firstName : "Misafir"}
             </button>
-            <button
-              onClick={navigateToLogin}
-              className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
-            >
-              Giriş Yap
-            </button>
-          </>
-        )}
+          ) : (
+            <>
+              <button
+                onClick={navigateToSignUp}
+                className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
+              >
+                Üye Ol
+              </button>
+              <button
+                onClick={navigateToLogin}
+                className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
+              >
+                Giriş Yap
+              </button>
+            </>
+          )}
+        </div>
       </div>
-
       {/* NAVBAR END */}
 
       {/* CATEGORIES START */}
