@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import FilteredBooks from "./FilteredBooks";
+import GenreTemplate from "./GenreTemplate";
 
 function Home() {
   const navigate = useNavigate();
@@ -47,9 +49,10 @@ function Home() {
           >
             Üye Ol
           </button>
-          <button 
-          onClick={navigateToLogin}
-          className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110  text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm">
+          <button
+            onClick={navigateToLogin}
+            className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110  text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
+          >
             Giriş Yap
           </button>
         </div>
@@ -97,6 +100,7 @@ function Home() {
         </div>
       </div>
       {/* CATEGORIES END */}
+      <FilteredBooks />
     </div>
   );
 }

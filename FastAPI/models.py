@@ -16,12 +16,12 @@ class Book(Base):
     __tablename__ = "books"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(75))
-    author = Column(String(50))
-    description = Column(Text(2000))
-    genres = Column(Text(200))
-    characters = Column(Text(300))
-    coverImg = Column(String(100))
+    title = Column(String(100))
+    author = Column(String(100))
+    description = Column(Text(800))
+    genres = Column(String(18))
+    page = Column(Integer)
+    coverImg = Column(String(120))
     stok = Column(Integer)
     price = Column(Float)
 

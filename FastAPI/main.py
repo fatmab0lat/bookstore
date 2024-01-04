@@ -1,7 +1,7 @@
 import fastapi
 from fastapi import HTTPException
 import pydantic
-from typing import Annotated, List
+from typing import Annotated, List, Union
 import models
 import database
 import sqlalchemy.orm
@@ -11,7 +11,7 @@ import bcrypt
 from passlib.context import CryptContext
 from database import SessionLocal
 from models import User
-
+#yeni basladigim filter kismi
 
 app = fastapi.FastAPI()
 # app.include_router(auth.router)
@@ -52,7 +52,7 @@ class BookBase(pydantic.BaseModel):
   author: str
   description: str
   genres : str
-  characters : str
+  page : int
   coverImg : str
   stok : int
   price : float
@@ -115,4 +115,18 @@ async def create_book(book: BookBase, db: db_dependency):
   # db.refresh(db_user)
   # return db_user
 
+@app.get("/books/", response_model= List[BookModel])
+async def read_books(db: db_dependency, skip: int = 0, limit: int = 100):
+  books = db.query(models.Book).offset(skip).limit(limit).all()
+  return books
   
+#deneme
+@app.get("/books/{genre}", response_model= List[BookModel])
+async def get_books_by_genre(genre: str, db: db_dependency):
+    if genre is None:
+        raise HTTPException(status_code=400, detail="Genre not provided")
+    books = db.query(models.Book).filter(models.Book.genres == genre).all()
+    if not books:
+        raise HTTPException(status_code=404, detail="No books found for this category")
+    return books
+
