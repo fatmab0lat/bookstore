@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../Store/authSlice";
+import FilteredBooks from "./FilteredBooks";
+import GenreTemplate from "./GenreTemplate";
 
 function Home() {
 const navigate = useNavigate();
@@ -73,7 +75,7 @@ const { isAuthenticated, currentUser } = useSelector(selectAuth);
           </>
         )}
       </div>
-      </div>
+
       {/* NAVBAR END */}
 
       {/* CATEGORIES START */}
@@ -117,6 +119,7 @@ const { isAuthenticated, currentUser } = useSelector(selectAuth);
         </div>
       </div>
       {/* CATEGORIES END */}
+      <FilteredBooks />
     </div>
   );
 }

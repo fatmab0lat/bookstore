@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { basicSchema } from "../schemas";
 import api from "../api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SignUp() {
   const [users, setUsers] = useState([]);
@@ -13,6 +13,8 @@ function SignUp() {
   const [confirmedPasswordData, setConfirmedPasswordData] = useState("");
   const [hashed_password, setHashedPassword] = useState("");
   const [btnStatus, setBtnStatus] = useState(false);
+
+  const navigate = useNavigate();
 
   const fetchUsers = async () => {
     const response = await api.get("/users/");
@@ -69,24 +71,16 @@ function SignUp() {
     setConfirmedPasswordData("");
   };
 
-  /*const sendPassword = async () => {
-    try {
-      const response = await api.post("/hash_password/", {
-        hashed_password: passwordData,
-      });
-      const hashedPassword = response.data.hashed_password;
-      setHashedPassword(hashedPassword); // Hashlenmiş şifreyi state'e set et
-    } catch (error) {
-      console.error("Şifre hashleme işlemi başarısız oldu:", error);
-    }
-  };*/
-
   /*const onSubmit = async (values, actions) => {
     await new Promise((resolve) => {
       setTimeout(resolve, 1000);
     });
     actions.resetForm();
   };*/
+
+  const navigateToLogin = () => {
+    navigate("/login");
+  };
 
   const { values, errors, handleSubmit, setFieldValue, isValid, dirty } =
     useFormik({
@@ -206,14 +200,15 @@ function SignUp() {
         >
           Kayıt Ol
         </button>
+        <div className="flex mt-3">
+          <p>Zaten hesabınız var mı?</p>
+          <button className="text-blue-300 ml-2" onClick={navigateToLogin}>
+            Giriş Yap
+          </button>
+        </div>
       </form>
     </div>
   );
 }
 
-/*
-            onChange={(e) =>
-              setFieldValue("email", e.currentTarget.value)
-
-*/
 export default SignUp;

@@ -1,9 +1,7 @@
 import fastapi
 from fastapi import Depends, HTTPException, status
 import pydantic
-from typing import Annotated, List
-from pyparsing import Optional
-from requests import Session
+from typing import Annotated, List, Union
 import models
 import database
 import sqlalchemy.orm
@@ -24,6 +22,8 @@ SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
 
 origins = [
+  "http://localhost",
+  "http://localhost:5173",
   "http://localhost",
   "http://localhost:5173",
   "http://localhost:5173/signUp/",
@@ -85,7 +85,52 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
   
 
 
-def get_password_hash(password):
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl="token")
+  
+def verify_password(plain_password, hashed_password):
+  return pwd_context.verify(plain_password, hashed_password)
+
+def authenticate_user(user_email: str, password: str, db):
+  user = db.query(User)\
+        .filter(User.email == user_email)\
+        .first()
+        
+  if not user:
+          return False
+  if not verify_password(password,user.hashed_password):
+    return False
+  return user
+
+
+
+
+def create_access_token(email: str, user_id: int,
+                        expires_delta:timedelta):
+    encode = {'sub':email,'id':user_id}
+    if expires_delta:
+      expire = datetime.utcnow() + expires_delta
+    else:
+      expire = datetime.utcnow() + timedelta(minutes = 15)
+    encode.update({'exp': expire})
+    return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
+  
+async def get_current_user(token: str = Depends(oauth2_bearer)):
+  try:
+    payload = jwt.decode(token, SECRET_KEY, algorithms= [ALGORITHM])
+    email: str = payload.get("sub")
+    user_id: int = payload.get("id")
+    
+    if email is None or user_id is None:
+      #raise HTTPException(status_code=404, detail="User not Found")
+      raise get_user_exception()
+    return {"email": email, "id": user_id}
+  except JWTError:
+    #raise HTTPException(status_code=404, detail="User not Found")
+    get_user_exception()
+  
+
+
+def get_password_hash(password: str):
     return pwd_context.hash(password)
 
 class UserBase(pydantic.BaseModel):
@@ -104,7 +149,23 @@ class BookBase(pydantic.BaseModel):
   author: str
   description: str
   genres : str
-  characters : str
+  page : int
+  coverImg : str
+  stok : int
+  price : float
+
+class BookModel(BookBase):
+  id:int
+
+  class Config:
+    orm_mode = True
+
+class BookBase(pydantic.BaseModel):
+  title: str
+  author: str
+  description: str
+  genres : str
+  page : int
   coverImg : str
   stok : int
   price : float
@@ -127,20 +188,16 @@ db_dependency = Annotated[sqlalchemy.orm.Session, fastapi.Depends(get_db)]
 models.Base.metadata.create_all(bind=database.engine)
 
 # @app.post("/hash-password/")
-
-async def hash_password(password: str):
-    try:
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        return hashed_password.decode('utf-8')
-    except Exception as e:
-        return {"error": str(e)}
+def hash_password(password: str):
+  hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+  return hashed_password.decode('utf-8')
 
 
 @app.post("/users/",status_code=fastapi.status.HTTP_201_CREATED)
 async def create_user(user: UserBase, db: db_dependency):
   user.hashed_password = hash_password(user.hashed_password)
+  user.hashed_password = hash_password(user.hashed_password)
   db_user = models.User(**user.dict())
-  #user.hashed_password = get_password_hash(user.password)
   db.add(db_user)
   db.commit()
   db.refresh(db_user)
@@ -193,6 +250,7 @@ def delete_user(user_id: int):
     db.close()
     return {"message": "User deleted successfully"}
 
+
 @app.post("/books/",status_code=fastapi.status.HTTP_201_CREATED)
 async def create_book(book: BookBase, db: db_dependency):
   db_book = models.Book(**book.dict())
@@ -202,4 +260,18 @@ async def create_book(book: BookBase, db: db_dependency):
   # db.refresh(db_user)
   # return db_user
 
+@app.get("/books/", response_model= List[BookModel])
+async def read_books(db: db_dependency, skip: int = 0, limit: int = 100):
+  books = db.query(models.Book).offset(skip).limit(limit).all()
+  return books
   
+#deneme
+@app.get("/books/{genre}", response_model= List[BookModel])
+async def get_books_by_genre(genre: str, db: db_dependency):
+    if genre is None:
+        raise HTTPException(status_code=400, detail="Genre not provided")
+    books = db.query(models.Book).filter(models.Book.genres == genre).all()
+    if not books:
+        raise HTTPException(status_code=404, detail="No books found for this category")
+    return books
+
