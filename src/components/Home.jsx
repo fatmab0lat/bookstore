@@ -1,13 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectAuth } from "../Store/authSlice";
+import FilteredBooks from "./FilteredBooks";
+import GenreTemplate from "./GenreTemplate";
 
 function Home() {
   const navigate = useNavigate();
+  const { isAuthenticated, currentUser } = useSelector(selectAuth);
+
   const navigateToSignUp = () => {
     navigate("/signUp");
   };
   const navigateToLogin = () => {
     navigate("/login");
+  };
+  const navigateToProfile = () => {
+    navigate("/profile");
   };
   return (
     <div className="h-screen w-screen">
@@ -40,18 +49,31 @@ function Home() {
           </form>
         </div>
         {/* SIGN IN/ SIGN UP */}
+
         <div>
-          <button
-            onClick={navigateToSignUp}
-            className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
-          >
-            Üye Ol
-          </button>
-          <button 
-          onClick={navigateToLogin}
-          className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110  text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm">
-            Giriş Yap
-          </button>
+          {isAuthenticated ? (
+            <button
+              onClick={navigateToProfile}
+              className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
+            >
+              Hoşgeldin {currentUser ? currentUser.firstName : "Misafir"}
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={navigateToSignUp}
+                className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
+              >
+                Üye Ol
+              </button>
+              <button
+                onClick={navigateToLogin}
+                className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
+              >
+                Giriş Yap
+              </button>
+            </>
+          )}
         </div>
       </div>
       {/* NAVBAR END */}
@@ -97,6 +119,7 @@ function Home() {
         </div>
       </div>
       {/* CATEGORIES END */}
+      <FilteredBooks />
     </div>
   );
 }
