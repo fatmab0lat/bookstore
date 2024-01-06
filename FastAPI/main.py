@@ -250,7 +250,6 @@ def delete_user(user_id: int):
     db.close()
     return {"message": "User deleted successfully"}
 
-
 @app.post("/books/",status_code=fastapi.status.HTTP_201_CREATED)
 async def create_book(book: BookBase, db: db_dependency):
   db_book = models.Book(**book.dict())
@@ -264,8 +263,7 @@ async def create_book(book: BookBase, db: db_dependency):
 async def read_books(db: db_dependency, skip: int = 0, limit: int = 100):
   books = db.query(models.Book).offset(skip).limit(limit).all()
   return books
-  
-#deneme
+
 @app.get("/books/{genre}", response_model= List[BookModel])
 async def get_books_by_genre(genre: str, db: db_dependency):
     if genre is None:
@@ -273,5 +271,14 @@ async def get_books_by_genre(genre: str, db: db_dependency):
     books = db.query(models.Book).filter(models.Book.genres == genre).all()
     if not books:
         raise HTTPException(status_code=404, detail="No books found for this category")
-    return books
+    return books  
 
+#deneme
+@app.get("/boooks/{title}", response_model= List[BookModel])
+async def get_books_by_title(title: str, db: db_dependency):
+    if title is None:
+        raise HTTPException(status_code=400, detail="Title not provided")
+    book = db.query(models.Book).filter(models.Book.title == title).all()
+    if not book:
+        raise HTTPException(status_code=404, detail="No books found with that title")
+    return book
