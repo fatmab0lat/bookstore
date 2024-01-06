@@ -25,7 +25,6 @@ function GenreTemplate({ genre }) {
     await api
       .get(path)
       .then((response) => {
-        console.log("romance books :", response.data);
         setFilteredBooks(response.data);
       })
       .catch((error) => {
