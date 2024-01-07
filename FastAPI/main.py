@@ -39,7 +39,6 @@ app.add_middleware(
 )
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="token")
   
 def verify_password(plain_password, hashed_password):
@@ -55,52 +54,6 @@ def authenticate_user(user_email: str, password: str, db):
   if not verify_password(password,user.hashed_password):
     return False
   return user
-
-
-
-
-def create_access_token(email: str, user_id: int,
-                        expires_delta:timedelta):
-    encode = {'sub':email,'id':user_id}
-    if expires_delta:
-      expire = datetime.utcnow() + expires_delta
-    else:
-      expire = datetime.utcnow() + timedelta(minutes = 15)
-    encode.update({'exp': expire})
-    return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
-  
-async def get_current_user(token: str = Depends(oauth2_bearer)):
-  try:
-    payload = jwt.decode(token, SECRET_KEY, algorithms= [ALGORITHM])
-    email: str = payload.get("sub")
-    user_id: int = payload.get("id")
-    
-    if email is None or user_id is None:
-      #raise HTTPException(status_code=404, detail="User not Found")
-      raise get_user_exception()
-    return {"email": email, "id": user_id}
-  except JWTError:
-    #raise HTTPException(status_code=404, detail="User not Found")
-    get_user_exception()
-  
-
-
-oauth2_bearer = OAuth2PasswordBearer(tokenUrl="token")
-  
-def verify_password(plain_password, hashed_password):
-  return pwd_context.verify(plain_password, hashed_password)
-
-def authenticate_user(user_email: str, password: str, db):
-  user = db.query(User)\
-        .filter(User.email == user_email)\
-        .first()
-        
-  if not user:
-          return False
-  if not verify_password(password,user.hashed_password):
-    return False
-  return user
-
 
 
 
@@ -140,21 +93,6 @@ class UserBase(pydantic.BaseModel):
   hashed_password: str
 
 class UserModel(UserBase):
-  id:int
-
-  class Config:
-    orm_mode = True
-class BookBase(pydantic.BaseModel):
-  title: str
-  author: str
-  description: str
-  genres : str
-  page : int
-  coverImg : str
-  stok : int
-  price : float
-
-class BookModel(BookBase):
   id:int
 
   class Config:
