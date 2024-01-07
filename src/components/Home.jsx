@@ -6,6 +6,7 @@ import FilteredBooks from "./FilteredBooks";
 import GenreTemplate from "./GenreTemplate";
 import api from "../api";
 import BookItem from "./BookItem";
+import Contact from "./Contact";
 
 function Home() {
   const navigate = useNavigate();
@@ -47,9 +48,9 @@ function Home() {
     navigate("/profile");
   };
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen w-screen overflow-x-hidden">
       {/* NAVBAR START */}
-      <div className="flex justify-around pt-8 font-semibold">
+      <div className="flex justify-around pt-8 font-semibold" id="top">
         <div className="text-3xl text-title border-b-4 border-title rounded-xl pb-2 ml-7">
           <a href="/">Kitap Kurdu</a>
         </div>
@@ -116,39 +117,39 @@ function Home() {
       <div className="text-center align-middle mt-5 p-6 bg-lime-600 text-gray-100">
         <div className="flex justify-evenly w-full font-bold text-lg text-center ">
           <div>
-            <a>Bilim Kurgu</a>
+            <a href="#Science Fiction">Bilim Kurgu</a>
           </div>
           <div className="h-6 w-px bg-gray-300"></div>
           <div>
-            <a>Fantastik</a>
+            <a href="#Fantasy">Fantastik</a>
           </div>
           <div className="h-6 w-px bg-gray-300"></div>
           <div>
-            <a>Macera</a>
+            <a href="#Adventure">Macera</a>
           </div>
           <div className="h-6 w-px bg-gray-300"></div>
           <div>
-            <a>Romantik</a>
+            <a href="#Romance">Romantik</a>
           </div>
           <div className="h-6 w-px bg-gray-300"></div>
           <div>
-            <a>Polisiye</a>
+            <a href="#Crime">Polisiye</a>
           </div>
           <div className="h-6 w-px bg-gray-300"></div>
           <div>
-            <a>Klasikler</a>
+            <a href="#Classics">Klasikler</a>
           </div>
           <div className="h-6 w-px bg-gray-300"></div>
           <div>
-            <a>Şiir</a>
+            <a href="#Dystopia">Distopya</a>
           </div>
           <div className="h-6 w-px bg-gray-300"></div>
           <div>
-            <a>Çizgi Roman</a>
+            <a href="#Thriller">Gerilim</a>
           </div>
           <div className="h-6 w-px bg-gray-300"></div>
           <div>
-            <a>İletişim</a>
+            <a href="#contact">İletişim</a>
           </div>
         </div>
       </div>
@@ -174,6 +175,7 @@ function Home() {
           </>
         )}
       </div>
+      <Contact />
     </div>
   );
 }
