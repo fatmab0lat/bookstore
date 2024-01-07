@@ -32,7 +32,7 @@ function GenreTemplate({ genre }) {
       });
   };
   return (
-    <div>
+    <div id={genre}>
       <h1 className="font-semibold text-2xl text-center mt-6">{genre}</h1>
       <div className="flex justify-center">
         <div className="flex flex-wrap align-middle justify-evenly mt-5 border-2 border-blue-900 rounded-xl w-3/4 p-4">
