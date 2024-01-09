@@ -110,7 +110,21 @@ class SoldBookModel(SoldBookBase):
   class Config:
     orm_mode = True
   
+class BookBase(pydantic.BaseModel):
+  title: str
+  author: str
+  description: str
+  genres : str
+  page : int
+  coverImg : str
+  stok : int
+  price : float
 
+class BookModel(BookBase):
+  id:int
+
+  class Config:
+    orm_mode = True
 
 def get_db():
   db = database.SessionLocal()
