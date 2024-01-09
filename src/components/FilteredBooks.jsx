@@ -14,8 +14,8 @@ function FilteredBooks() {
   ];
   return (
     <div>
-      {genres.map((genre) => {
-        return <GenreTemplate genre={genre} />;
+      {genres.map((genre, key) => {
+        return <GenreTemplate genre={genre} key={key} />;
       })}
     </div>
   );
