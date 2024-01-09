@@ -114,6 +114,8 @@ class BookModel(BookBase):
   class Config:
     orm_mode = True
 
+class UpdateFirstName(pydantic.BaseModel):
+    first_name: str
 
 def get_db():
   db = database.SessionLocal()
@@ -220,3 +222,14 @@ async def get_books_by_title(title: str, db: db_dependency):
     if not book:
         raise HTTPException(status_code=404, detail="No books found with that title")
     return book
+
+@app.put("/users/{user_id}")
+async def update_user_first_name(user_id: int, firstName: str, db: sqlalchemy.orm.Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+    
+    user.firstName = firstName
+    db.commit()
+
+    return {"message": "Kullanıcı adı güncellendi", "user_id": user_id, "new_firstName": firstName}
