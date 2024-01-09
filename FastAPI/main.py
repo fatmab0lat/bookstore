@@ -98,6 +98,18 @@ class UserModel(UserBase):
   class Config:
     orm_mode = True
 
+class SoldBookBase(pydantic.BaseModel):
+  bookid: int
+  userid: int
+  book_title: str
+  price: float
+  
+class SoldBookModel(SoldBookBase):
+  id:int
+  
+  class Config:
+    orm_mode = True
+  
 class BookBase(pydantic.BaseModel):
   title: str
   author: str
@@ -113,9 +125,6 @@ class BookModel(BookBase):
 
   class Config:
     orm_mode = True
-
-class UpdateFirstName(pydantic.BaseModel):
-    first_name: str
 
 def get_db():
   db = database.SessionLocal()
@@ -213,7 +222,36 @@ async def get_books_by_genre(genre: str, db: db_dependency):
         raise HTTPException(status_code=404, detail="No books found for this category")
     return books  
 
-#deneme
+
+# get book by id for detail page
+@app.get("/books/by-id/{book_id}", response_model=BookModel)
+async def read_book_by_id(book_id: int , db: db_dependency):
+    book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    if not book:
+      raise HTTPException(status_code=404, detail="Book not found")
+    return book
+
+
+
+class PurchaseModel(pydantic.BaseModel):
+    user_id: int
+    items: List[SoldBookBase]
+
+@app.post("/confirm-basket/", status_code=fastapi.status.HTTP_201_CREATED)
+async def confirm_basket(purchase: PurchaseModel, db: db_dependency, current_user: dict = Depends(get_current_user)):
+    for item in purchase.items:
+        db_sold_book = models.SoldBook(
+            user_id=current_user["id"],
+            book_id=item.bookid,
+            book_title=item.book_title,
+            price=item.price,
+        )
+        db.add(db_sold_book)
+
+    db.commit()
+
+    return {"message": "Basket confirmed successfully"}
+
 @app.get("/boooks/{title}", response_model= List[BookModel])
 async def get_books_by_title(title: str, db: db_dependency):
     if title is None:
@@ -233,3 +271,4 @@ async def update_user_first_name(user_id: int, firstName: str, db: sqlalchemy.or
     db.commit()
 
     return {"message": "Kullanıcı adı güncellendi", "user_id": user_id, "new_firstName": firstName}
+

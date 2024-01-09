@@ -44,6 +44,7 @@ function GenreTemplate({ genre }) {
                 author={book.author}
                 price={book.price}
                 coverImg={book.coverImg}
+                bookId={book.id}
               />
             );
           })}
