@@ -39,7 +39,7 @@ function Login() {
         const data = await response.json();
         console.log("Response Data:", data);
         console.log("Access Token:", data.token);
-        // Token doğrulandı, kullanıcı bilgilerini alabiliriz
+       
         const userResponse = await fetch("http://127.0.0.1:8000/users/", {
           headers: {
             Authorization: `Bearer ${data.access_token}`,
@@ -122,6 +122,9 @@ function Login() {
                 </div>
               )}
             </div>
+            {loginError && (
+            <div className="error text-red-600 text-xs">{loginError}</div>
+            )}
             <button
               className="border-2 border-title bg-title text-black pt-2 pb-2 pl-6 pr-6 rounded-2xl w-80 disabled:opacity-40 disabled:scale-100 mt-3 hover:scale-105 hover:delay-250 font-bold tracking-widest"
               type="submit"
