@@ -3,7 +3,7 @@ import React from "react";
 function Contact() {
   return (
     <div
-      className="h-60 w-screen bg-sky-600 mt-10 text-lg font-bold text-center flex flex-col justify-between"
+      className="h-50 w-screen bg-sky-600 mt-10 text-lg font-bold text-center flex flex-col justify-between"
       id="contact"
     >
       <div className="pt-3">
