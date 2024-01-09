@@ -1,13 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { selectAuth } from "../Store/authSlice";
 import FilteredBooks from "./FilteredBooks";
 import GenreTemplate from "./GenreTemplate";
-
+import { logout } from "../Store/authSlice"; 
 function Home() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, currentUser } = useSelector(selectAuth);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const handleLogOut = () => {
+    dispatch(logout());
+  }
 
   const navigateToSignUp = () => {
     navigate("/signUp");
@@ -17,6 +22,21 @@ function Home() {
   };
   const navigateToProfile = () => {
     navigate("/profile");
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+  const handleOptionClick = (option) => {
+    if (option === "updateProfile") {
+      navigate("/profile");
+    } else if (option === "goToCart") {
+      navigate("/basket");
+    } else if (option === "logout") {
+      handleLogOut();
+    }
+   
+    setDropdownOpen(false); 
   };
   return (
     <div className="h-screen w-screen">
@@ -48,17 +68,54 @@ function Home() {
             </button>
           </form>
         </div>
-        {/* SIGN IN/ SIGN UP */}
-
-        <div>
-          {isAuthenticated ? (
-            <button
-              onClick={navigateToProfile}
-              className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600 hover:scale-110 text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
-            >
-              Hoşgeldin {currentUser ? currentUser.firstName : "Misafir"}
-            </button>
-          ) : (
+             {/* SIGN IN/ SIGN UP */}
+      <div>
+      {isAuthenticated ? (
+          <div className="relative inline-block text-left">
+            <div>
+              <button
+                type="button"
+                className="border-2 border-navbar bg-navbar hover:bg-red-600 hover:border-red-600  text-white pt-1 pb-1 pl-5 pr-5 rounded-xl ml-3 text-sm"
+                id="userMenu"
+                onClick={toggleDropdown}
+              >
+                Hoşgeldin {currentUser ? currentUser.firstName : "Misafir"}
+              </button>
+            </div>
+            {dropdownOpen && (
+              <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <div
+                  className="py-1"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="userMenu"
+                >
+                  <button
+                    onClick={() => handleOptionClick("updateProfile")}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    Profil
+                  </button>
+                  <button
+                    onClick={() => handleOptionClick("goToCart")}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    Sepet
+                  </button>
+                  <button
+                    onClick={() => handleOptionClick("logout")}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    Çıkış Yap
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )  : (
             <>
               <button
                 onClick={navigateToSignUp}

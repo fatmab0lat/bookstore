@@ -57,8 +57,6 @@ def authenticate_user(user_email: str, password: str, db):
   return user
 
 
-
-
 def create_access_token(email: str, user_id: int,
                         expires_delta:timedelta):
     encode = {'sub':email,'id':user_id}
@@ -160,21 +158,18 @@ class BookModel(BookBase):
   class Config:
     orm_mode = True
 
-class BookBase(pydantic.BaseModel):
-  title: str
-  author: str
-  description: str
-  genres : str
-  page : int
-  coverImg : str
-  stok : int
-  price : float
-
-class BookModel(BookBase):
+class SoldBookBase(pydantic.BaseModel):
+  bookid: int
+  userid: int
+  book_title: str
+  price: float
+  
+class SoldBookModel(SoldBookBase):
   id:int
-
+  
   class Config:
     orm_mode = True
+  
 
 
 def get_db():
@@ -205,7 +200,7 @@ async def create_user(user: UserBase, db: db_dependency):
 
 @app.post("/token/")
 async def login_for_access_token(form_data : OAuth2PasswordRequestForm = Depends(),
-                                 db: Session = Depends(get_db)):
+                                 db: sqlalchemy.orm.Session = Depends(get_db)):
   user = authenticate_user(form_data.username,form_data.password, db)
   if not user:
     #raise HTTPException(status_code=404, detail="User not found")
@@ -275,3 +270,31 @@ async def get_books_by_genre(genre: str, db: db_dependency):
         raise HTTPException(status_code=404, detail="No books found for this category")
     return books
 
+# get book by id for detail page
+@app.get("/books/by-id/{book_id}", response_model=BookModel)
+async def read_book_by_id(book_id: int , db: db_dependency):
+    book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    if not book:
+      raise HTTPException(status_code=404, detail="Book not found")
+    return book
+
+
+
+class PurchaseModel(pydantic.BaseModel):
+    user_id: int
+    items: List[SoldBookBase]
+
+@app.post("/confirm-basket/", status_code=fastapi.status.HTTP_201_CREATED)
+async def confirm_basket(purchase: PurchaseModel, db: db_dependency, current_user: dict = Depends(get_current_user)):
+    for item in purchase.items:
+        db_sold_book = models.SoldBook(
+            user_id=current_user["id"],
+            book_id=item.bookid,
+            book_title=item.book_title,
+            price=item.price,
+        )
+        db.add(db_sold_book)
+
+    db.commit()
+
+    return {"message": "Basket confirmed successfully"}

@@ -7,6 +7,8 @@ import Login from "./components/Login";
 
 
 import { Routes, Route } from "react-router-dom";
+import BookDetail from "./components/BookDetail";
+import Basket from "./components/Basket"
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path="/kullaniciSozlesmesi" element={<KullaniciSozlesmesi />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/profile" element={<Profile/>} />
+        <Route path="book/:bookId" element={<BookDetail/>} />
+        <Route path="/basket" element={<Basket/>}/>
         {/* <Route path="/" element={<Home/>}/> */}
       </Routes>
     </>
